@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面标题（可根据需要设置） -->
+    <title>美团外卖节活动</title>
+    <style>
+        /* 重置所有元素的默认样式，确保在不同浏览器中表现一致 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        
+        /* 页面整体样式 */
+        body {
+            background: #ffffff; /* 白色背景 */
+            color: #333; /* 深灰色文字 */
+            min-height: 100vh; /* 最小高度为屏幕高度 */
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        /* 顶部活动图片区域 */
+        .main-banner {
+            padding: 20px 15px 5px; /* 图片与边界的间距 */
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+        }
+        
+        /* 活动图片样式 */
+        .banner-image {
+            width: 100%; /* 宽度100% - 自动适应容器宽度 */
+            max-width: 600px; /* 最大宽度限制 */
+            height: auto; /* 高度自适应 */
+            border-radius: 12px; /* 圆角效果 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 柔和阴影 */
+        }
+        
+        /* 核心功能区容器 */
+        .action-section {
+            max-width: 600px; /* 最大宽度限制 */
+            margin: 0 auto; /* 水平居中 */
+            padding: 0 15px; /* 左右内边距 */
+            width: 100%; /* 宽度100% */
+            display: flex;
+            flex-direction: column; /* 垂直排列子元素 */
+        }
+        
+        /* 口令框样式 */
+        .code-container {
+            background: #fffae6; /* 浅黄色背景 */
+            border-radius: 12px; /* 圆角效果 */
+            padding: 25px; /* 内边距 */
+            margin: 20px 0 0; /* 外边距 */
+            text-align: center; /* 文本居中 */
+            border: 2px solid #ffd000; /* 美团黄色边框 */
+            box-shadow: 0 4px 15px rgba(255, 180, 0, 0.2); /* 阴影效果 */
+            position: relative; /* 相对定位 */
+            overflow: hidden; /* 溢出隐藏 */
+        }
+        
+        /* 口令框顶部装饰条 */
+        .code-container::before {
+            content: ""; /* 伪元素内容 */
+            position: absolute; /* 绝对定位 */
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px; /* 高度 */
+            background: linear-gradient(90deg, #ffd000, #ffb000, #ffd000); /* 渐变效果 */
+        }
+        
+        /* 口令文本样式 */
+        .jing-code {
+            font-size: 18px; /* 字体大小 */
+            color: #ff5000; /* 美团橙色 */
+            text-align: center; /* 文本居中 */
+            line-height: 1.6; /* 行高 */
+            -webkit-user-select: all; /* 允许用户全选文本 */
+            user-select: all; /* 允许用户全选文本 */
+            padding: 12px 8px; /* 内边距 */
+            font-weight: bold; /* 字体加粗 */
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            word-wrap: break-word; /* 允许在单词内换行 */
+            white-space: pre-line; /* 保留换行符 */
+            display: inline-block; /* 行内块元素 */
+            width: 100%; /* 宽度100% */
+        }
+        
+        /* 按钮区域 */
+        .button-area {
+            display: flex;
+            flex-direction: column; /* 垂直排列 */
+            margin: 25px 0 0; /* 外边距 */
+            gap: 8px; /* 子元素间距 */
+        }
+        
+        /* 一键复制按钮样式 */
+        .copy-btn {
+            background: #ffd000; /* 美团黄色背景 */
+            background: linear-gradient(to bottom, #ffd000, #ffb000); /* 渐变效果 */
+            color: white; /* 白色文字 */
+            border: none; /* 无边框 */
+            border-radius: 50px; /* 圆角50px（胶囊按钮） */
+            padding: 18px 0; /* 上下内边距 */
+            font-size: 20px; /* 字体大小 */
+            font-weight: bold; /* 字体加粗 */
+            cursor: pointer; /* 鼠标手型 */
+            width: 100%; /* 宽度100% */
+            transition: all 0.2s; /* 过渡效果 */
+            box-shadow: 0 4px 15px rgba(255, 180, 0, 0.3); /* 阴影效果 */
+        }
+        
+        /* 操作指南样式 */
+        .guide-container {
+            display: flex; /* 弹性布局 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            margin-top: 20px; /* 顶部外边距 */
+            gap: 4px; /* 子元素间距 */
+            font-size: 14px; /* 字体大小 */
+            color: #ff5000; /* 美团橙色 */
+            padding: 8px 15px; /* 内边距 */
+            background: rgba(255, 208, 0, 0.1); /* 半透明背景 */
+            border-radius: 20px;
+        }
+        
+        /* 底部留白 */
+        .footer-space {
+            height: 40px; /* 高度 */
+        }
+        
+        /* 成功提示弹窗 */
+        .success-popup {
+            position: fixed; /* 固定定位 */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85); /* 半透明黑色背景 */
+            display: flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            z-index: 1000; /* 层叠顺序 */
+            display: none; /* 默认隐藏 */
+        }
+        
+        /* 失败弹窗 */
+        .failure-popup {
+            position: fixed; /* 固定定位 */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85); /* 半透明黑色背景 */
+            display: flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            z-index: 1000; /* 层叠顺序 */
+            display: none; /* 默认隐藏 */
+        }
+        
+        /* 弹窗内容通用样式 */
+        .popup-content, .failure-content {
+            background: white; /* 白色背景 */
+            border-radius: 16px; /* 圆角 */
+            padding: 30px 25px; /* 内边距 */
+            text-align: center; /* 文本居中 */
+            width: 85%; /* 宽度85% */
+            max-width: 320px; /* 最大宽度 */
+            position: relative; /* 相对定位 */
+        }
+        
+        /* 关闭按钮样式 */
+        .close-btn {
+            background: #ffd000; /* 美团黄色 */
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        /* 小屏幕适配（小于600px） */
+        @media (max-width: 600px) {
+            /* 手机端口令字体稍小 */
+            .jing-code {
+                font-size: 16px;
+            }
+            
+            /* 调整按钮高度和字体大小 */
+            .copy-btn {
+                padding: 16px 0;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        顶部活动图片区域 -----------------------
+        修改点1：设置您的活动图片
+        使用方法：
+        1. 将图片文件放在与HTML同一文件夹下
+        2. 修改src属性为您的图片文件名
+        例如：src="my-image.jpg"
+    -->
+    <div class="main-banner">
+        <img class="banner-image" src="your-image-path.jpg" alt="美团外卖节活动">
+    </div>
+    
+    <!-- 核心功能区 -->
+    <div class="action-section">
+        <!-- 
+            口令框区域 -----------------------
+            修改点2：设置您的口令文本
+            见下方JavaScript区域
+        -->
+        <div class="code-container">
+            <div id="jingCode" class="jing-code"></div>
+        </div>
+        
+        <!-- 按钮区域 -->
+        <div class="button-area">
+            <!-- 一键复制按钮 -->
+            <button id="copyBtn" class="copy-btn">一键复制口令</button>
+            
+            <!-- 操作指南 -->
+            <div class="guide-container">
+                <span>长按口令</span>
+                <span>→</span>
+                <span>全选</span>
+                <span>→</span>
+                <span>复制</span>
+                <span>→</span>
+                <span>打开美团APP</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部留白 -->
+    <div class="footer-space"></div>
+    
+    <!-- 
+        成功提示弹窗 -----------------------
+        修改点3（可选）：修改提示文本内容
+    -->
+    <div class="success-popup" id="successPopup">
+        <div class="popup-content">
+            <div style="font-size:24px;font-weight:bold;color:#ff5000;margin-bottom:15px;">复制成功!</div>
+            <div style="color:#555;font-size:17px;margin:15px 0;line-height:1.5;">美团口令已保存到剪贴板</div>
+            <div style="color:#555;font-size:17px;margin:15px 0;line-height:1.5;">请打开美团APP使用</div>
+            <div style="color:#999;font-size:14px;margin-top:20px;">本提示3秒后自动关闭</div>
+        </div>
+    </div>
+    
+    <!-- 
+        失败弹窗 -----------------------
+        修改点4（可选）：修改提示文本内容
+    -->
+    <div class="failure-popup" id="failurePopup">
+        <div class="failure-content">
+            <div style="font-size:48px;color:#ff5000;margin-bottom:15px;">⚠️</div>
+            <div style="font-size:24px;font-weight:bold;color:#ff5000;margin-bottom:15px;">复制失败</div>
+            <div style="color:#333;font-size:16px;line-height:1.6;margin:10px 0 20px;">
+                很抱歉，自动复制功能出现异常
+            </div>
+            <div style="color:#333;font-size:16px;line-height:1.6;margin:10px 0 20px;">
+                请您手动复制：
+            </div>
+            <div style="color:#333;font-size:16px;line-height:1.6;margin:10px 0 20px;">
+                长按口令 → 全选 → 复制
+            </div>
+            
+            <button class="close-btn">去手动复制</button>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取页面元素
+            const copyBtn = document.getElementById('copyBtn');
+            const successPopup = document.getElementById('successPopup');
+            const failurePopup = document.getElementById('failurePopup');
+            const jingCodeElement = document.getElementById('jingCode');
+            
+            /* 
+                修改点2：设置您的口令文本 -----------------------
+                将下面的文字替换为您的口令
+                格式说明：
+                1. 使用三反引号(`)包围文本
+                2. 文本中换行会自动显示为换行
+                3. 包含完整链接
+            */
+            let jingCodeText = `1美团外卖节
+点我领取大额红包
+1 %复制信息#% 打开团App http:/💰jyMWYyM2NmYjQ💰一起领`;
+            
+            // 在页面上显示口令文本
+            jingCodeElement.textContent = jingCodeText;
+            
+            // 为复制按钮添加点击事件
+            copyBtn.addEventListener('click', copyCode);
+            
+            // 处理弹窗关闭
+            successPopup.addEventListener('click', function(e) {
+                if (e.target === this) successPopup.style.display = 'none';
+            });
+            failurePopup.addEventListener('click', function(e) {
+                if (e.target === this) failurePopup.style.display = 'none';
+            });
+            document.querySelector('.close-btn').addEventListener('click', function() {
+                failurePopup.style.display = 'none';
+            });
+            
+            // 复制功能实现
+            function copyCode() {
+                try {
+                    // 首先尝试使用现代浏览器的复制API
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(jingCodeText)
+                            .then(function() {
+                                showSuccess(); // 复制成功
+                            })
+                            .catch(function() {
+                                showFailure(); // 复制失败
+                            });
+                        return;
+                    }
+                    
+                    // 传统复制方法（兼容旧浏览器）
+                    const textArea = document.createElement('textarea');
+                    textArea.value = jingCodeText;
+                    textArea.style.cssText = 'position:absolute;left:-9999px;opacity:0.01;';
+                    document.body.appendChild(textArea);
+                    
+                    // 设备兼容处理
+                    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        // iOS设备特殊处理
+                        const range = document.createRange();
+                        range.selectNodeContents(textArea);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        textArea.setSelectionRange(0, jingCodeText.length);
+                    } else {
+                        textArea.select(); // 其他设备直接选中文本
+                    }
+                    
+                    // 执行复制命令
+                    if (document.execCommand('copy')) {
+                        showSuccess(); // 复制成功
+                    } else {
+                        showFailure(); // 复制失败
+                    }
+                    
+                    // 清理：移除文本区域
+                    document.body.removeChild(textArea);
+                    
+                } catch (err) {
+                    showFailure(); // 出错处理
+                }
+            }
+            
+            // 显示成功提示
+            function showSuccess() {
+                successPopup.style.display = 'flex';
+                // 3秒后自动关闭
+                setTimeout(function() {
+                    successPopup.style.display = 'none';
+                }, 3000);
+            }
+            
+            // 显示失败提示
+            function showFailure() {
+                failurePopup.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>
